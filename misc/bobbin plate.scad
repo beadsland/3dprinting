@@ -1,4 +1,12 @@
-width=43.68;
+// Print Thin Walls
+// Initial Layer Speed: 10 mm/s
+// draft Quality (fine is too short)
+// Top/Bottom Pattern: Concentric (Lines would break riser????)
+// Print Supports (clear notches with straight pin)
+
+widen = .5;
+
+width=43.68 + widen;
 depth=39.4;
 thick=1.55;
 dub_thick=2.62;
@@ -15,10 +23,10 @@ tab_height = 3.42;
 tab_thick = 1.54;
 
 tab_divot = 2.15;
-tab_divot_thin = 1.07;
+tab_divot_thin = 1.07 -.6; // thickness is wrong w/o adjustment
 
 nubbin = .94;
-nub_wid = 43.93 - width;
+nub_wid = 43.93 - width + widen;
 nub_disp1 = 9.14;
 nub_disp2 = 29.29;
 
@@ -77,6 +85,7 @@ difference() {
 difference() {
     color([0,1,0]) translate([-tab_height,tab_displace,ridge_thick-tab_thick]) cube([tab_height,tab_width,tab_thick]);
     color([.5,0,1]) translate([-tab_divot,tab_displace,ridge_thick-tab_thick]) cube([tab_divot,tab_width,tab_divot_thin]);
+    color([0,.5,1]) translate([-tab_height-tab_width*1.05,tab_displace,ridge_thick-tab_thick+tab_width*1.05/2]) rotate([0,45,0]) cube(tab_width);
 }
 
 // nubbins
