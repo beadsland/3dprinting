@@ -13,46 +13,66 @@ stud_diam = 3 * lego + .2 * toler;
 stud_inner = 2 * lego + .2 * toler;
 stud_height = 1 * lego;
 
-duct_diam = 5 * sqrt(2) - 3 + 2.5 * toler; 
+duct_diam = 5 * sqrt(2) - 3 + 2.5 * toler;
 duct_inner = duct_diam - wall;
 
 brick_one = 5 * lego;
 inner_one = brick_one - (wall*2);
 
-module brick(grid=[2,2], height=6) {
-    if (grid[0] < grid[1]) brick([grid[1], grid[0]], height);
+//
+// API modules
+///
+function lego_unit() = lego;
+
+function brick_unit() = brick_one;
+
+function brick_height() = 6;
+
+function plate_height() = 2;
+
+module plate(grid=[3,2], pegs=true, hollow=true, posts=true) {
+    brick(grid, plate_height(), pegs, hollow, posts);
+}
+
+module brick(grid=[2,1], height=brick_height(), pegs=true, hollow=true, posts=true) {
+    if (grid[0] < grid[1]) translate([0, grid[0]*brick_one, 0]) rotate([0,0,-90]) brick([grid[1], grid[0]], height, pegs, hollow, posts);
     else {
-        if (grid[1] > 1) wide_brick(grid, height);
-        else narrow_brick(grid[0], height);
+        if (grid[1] > 1) wide_brick(grid, height, pegs, hollow);
+        else narrow_brick(grid[0], height, pegs, hollow, posts);
         }
 }
 
-module wide_brick(grid=[2,2], height=6) {
-    brick_sans_posts(grid, height);
-    difference() {
-        for (col = [1 : grid[1]-1]) for(row = [1:grid[0]-1]) color([0,1,1]) translate([brick_one*col,brick_one*row,0]) cylinder(d=duct_diam, lego*height-wall/2);
-        for (col = [1 : grid[1]-1]) for(row = [1:grid[0]-1]) color([1,1,1]) translate([brick_one*col,brick_one*row,0]) cylinder(d=duct_inner, lego*height-wall/2);
-        }
-}
-
-module narrow_brick(pegs=2, height=6, posts=true) {
+//
+// Subroutine modules
+//
+module wide_brick(grid, height, pegs, hollow) {
     union() {
-        brick_sans_posts([pegs, 1], height);
-        if (posts && pegs>1) for (spot = [1 : pegs-1]) color([0,1,0]) translate([brick_one/2,brick_one*spot,0]) cylinder(d=stud_inner, lego*height);
+        brick_sans_posts(grid, height, pegs, hollow);
+        difference() {
+            for (col = [1 : grid[1]-1]) for(row = [1:grid[0]-1]) color([0,1,1]) translate([brick_one*col,brick_one*row,0]) cylinder(d=duct_diam, lego*height-wall/2);
+            for (col = [1 : grid[1]-1]) for(row = [1:grid[0]-1]) color([1,1,1]) translate([brick_one*col,brick_one*row,0]) cylinder(d=duct_inner, lego*height-wall/2);
+            }
+    }
+}
+
+module narrow_brick(length, height, pegs, hollow, posts) {
+    union() {
+        brick_sans_posts([length, 1], height, pegs, hollow);
+        if (posts && length>1) for (spot = [1 : length-1]) color([0,1,0]) translate([brick_one/2,brick_one*spot,0]) cylinder(d=stud_inner, lego*height);
         }
 }
 
-module brick_sans_posts(grid, height) {
+module brick_sans_posts(grid, height, pegs, hollow) {
     difference() {
-        brick_sans_hollow(grid, height);
+        brick_sans_hollow(grid, height, pegs);
         color([0,0,1]) translate([wall,wall,0]) cube([inner_one+(grid[1]-1)*brick_one, inner_one+(grid[0]-1)*brick_one, lego*height - wall+toler/2]);
-        for (col = [1 : grid[1]]) for(row = [1:grid[0]]) color([1,1,0]) translate([brick_one*(col-.5),brick_one*(row-.5),lego*height-wall*2]) cylinder(d=stud_inner, stud_height+wall*2);
+        if (pegs && hollow) for (col = [1 : grid[1]]) for(row = [1:grid[0]]) color([1,1,0]) translate([brick_one*(col-.5),brick_one*(row-.5),lego*height-wall*2]) cylinder(d=stud_inner, stud_height+wall*2);
         }
 }
 
-module brick_sans_hollow(grid, height) {
+module brick_sans_hollow(grid, height, pegs) {
     union() {
         cube([brick_one*grid[1], brick_one*grid[0], lego*height]);
-        for (col = [1 : grid[1]]) for(row = [1:grid[0]]) color([1,0,0]) translate([brick_one*(col-.5),brick_one*(row-.5),lego*height]) cylinder(d=stud_diam, stud_height);
+        if (pegs) for (col = [1 : grid[1]]) for(row = [1:grid[0]]) color([1,0,0]) translate([brick_one*(col-.5),brick_one*(row-.5),lego*height]) cylinder(d=stud_diam, stud_height);
         }
 }
