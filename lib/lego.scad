@@ -2,6 +2,10 @@
 
 brick([2,3],2);
 
+// NOTE: The bricks described here are not perfectly fit to the tolerances of a
+//             consumer injection-molded peg-and-socket brick. They snap tight to
+//             one another, but not all that well to the consumer-grade bricks.
+
 // src: https://bricks.stackexchange.com/questions/288/what-are-the-dimensions-of-a-lego-brick
 
 lego = 1.6;
