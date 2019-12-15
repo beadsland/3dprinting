@@ -1,10 +1,10 @@
 // Print Thin Walls
+// DRAFT (extra fine notch doesn't clear easily)
 // Initial Layer Speed: 10 mm/s
-// draft Quality (fine is too short)
 // Top/Bottom Pattern: Concentric (Lines would break riser????)
 // Print Supports (clear notches with straight pin)
 
-widen = .5;
+widen = .5125;   //.5; (.6 doesn't fit)
 
 width=43.68 + widen;
 depth=39.4;
@@ -23,7 +23,7 @@ tab_height = 3.42;
 tab_thick = 1.54;
 
 tab_divot = 2.15;
-tab_divot_thin = 1.07 -.6; // thickness is wrong w/o adjustment
+tab_divot_thin = 1.07; // thickness is wrong w/o adjustment
 
 nubbin = .94;
 nub_wid = 43.93 - width + widen;
@@ -55,7 +55,7 @@ shallow_len = 19.37;
 shallow_wid = 11.14;
 shallow_dep = 0.59;
 
-union() {
+rotate([0,0,0]) union() {
 
 // Main Plate
 difference() {

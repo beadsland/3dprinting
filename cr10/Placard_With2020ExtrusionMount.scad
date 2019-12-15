@@ -7,11 +7,11 @@ m5_drill = 5;
 
 //frame(pegs=true);
 
-back();
+//back();
 
 translate([-30, 50, 0]) base(slope=15);
 
-translate([-30, 0, 0])  sheath(slope=15);
+//translate([-30, 0, 0])  sheath(slope=15);
 
 
 module sheath(width=20, length=40, depth=3, hole=8, post_inset=3, post_height=20, slope=5) {
@@ -33,7 +33,7 @@ module base(width=20, length=40, depth=3, hole=8, drill=5, post_inset=1, post_he
     difference() {
         cube([width, length, depth]);
         translate([width/2, hole, 0]) cylinder(d=drill, depth);
-        translate([width/2, length-8, 0]) cylinder(d=drill, depth);
+        translate([width/2, length-hole, 0]) cylinder(d=drill, depth);
     }
     post(width, length, post_height, hole, post_inset, 0, slope);
 }

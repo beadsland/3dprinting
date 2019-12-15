@@ -1,6 +1,6 @@
 //narrow_brick(height=3);
 
-brick([2,3],2);
+plate([2,3], hollow=false);
 
 // NOTE: The bricks described here are not perfectly fit to the tolerances of a
 //             consumer injection-molded peg-and-socket brick. They snap tight to
@@ -10,15 +10,15 @@ brick([2,3],2);
 
 lego = 1.6;
 
-wall = 1 * lego;
+wall = lego * .95; // * 1.0
 toler = 1;
 
-stud_diam = 3 * lego + .2 * toler;
-stud_inner = 2 * lego + .2 * toler;
+stud_diam = 3 * lego + .5 * toler; // .2
+stud_inner = 2 * lego + .5 * toler; // .2
 stud_height = 1 * lego;
 
 duct_diam = 5 * sqrt(2) - 3 + 2.5 * toler;
-duct_inner = duct_diam - wall;
+duct_inner = duct_diam - wall - .2*toler; // 0
 
 brick_one = 5 * lego;
 inner_one = brick_one - (wall*2);

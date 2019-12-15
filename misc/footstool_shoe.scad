@@ -14,8 +14,8 @@ heel = 15;
 
 foot = 43 + wall*2;
 
-mirror() shoe();
-shoe();
+translate([40,0,0]) mirror() shoe();
+translate([-40,0,0]) shoe();
 
 module shoe() {
     difference() {
